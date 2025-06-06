@@ -1,40 +1,36 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>2-Port Network Calculator (S, Y, Z, ABCD)</title>
-  <!-- MathJax for LaTeX 수식 렌더링 -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-  </script>
-  <!-- math.js for complex & matrix 연산 -->
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
       background: #f8f9fa;
       padding: 20px;
-      text-align: center;
+      text-align: left;
     }
-    h1 { color: #2c3e50; margin-bottom: 20px; }
+    h1 { color: #2c3e50; margin-bottom: 20px; text-align: center; }
     .input-group { margin: 10px 0; }
     label {
       display: inline-block;
-      width: 100px;
-      text-align: right;
+      width: 130px;
+      text-align: left;
       margin-right: 10px;
       font-weight: 500;
     }
     select, input {
-      width: 120px;
+      width: 150px;
       padding: 5px;
-      text-align: right;
+      text-align: left;
     }
     .complex-inputs {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
       gap: 15px;
       margin: 15px 0;
     }
@@ -42,8 +38,12 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      min-width: 120px;
     }
-    .io-group label { text-align: left; width: auto; margin: 0; }
+    .io-group label {
+      text-align: left;
+      margin: 0;
+    }
     .result-box, .formula-box {
       margin: 20px auto;
       background: #fff;
@@ -77,25 +77,25 @@
 </head>
 <body>
 
-  <h1>2-포트 파라미터 변환기</h1>
+  <h1>2-Port Parameter Converter</h1>
 
   <div class="input-group">
-    <label for="inputType">입력 형식:</label>
+    <label for="inputType">Input Format:</label>
     <select id="inputType">
-      <option value="S">S-파라미터</option>
-      <option value="Z">Z-파라미터</option>
-      <option value="Y">Y-파라미터</option>
-      <option value="ABCD">ABCD 매트릭스</option>
+      <option value="S">S-parameters</option>
+      <option value="Z">Z-parameters</option>
+      <option value="Y">Y-parameters</option>
+      <option value="ABCD">ABCD Matrix</option>
     </select>
   </div>
 
   <div class="input-group">
-    <label for="outputType">출력 형식:</label>
+    <label for="outputType">Output Format:</label>
     <select id="outputType">
-      <option value="S">S-파라미터</option>
-      <option value="Z">Z-파라미터</option>
-      <option value="Y">Y-파라미터</option>
-      <option value="ABCD">ABCD 매트릭스</option>
+      <option value="S">S-parameters</option>
+      <option value="Z">Z-parameters</option>
+      <option value="Y">Y-parameters</option>
+      <option value="ABCD">ABCD Matrix</option>
     </select>
   </div>
 
@@ -105,29 +105,28 @@
   </div>
 
   <div class="complex-inputs" id="paramInputs">
-    <!-- JavaScript가 여기에 4개 param 그룹을 생성합니다 -->
+    <!-- JS creates parameter input fields here -->
   </div>
 
-  <button onclick="convert()">계산하기</button>
+  <button onclick="convert()">Convert</button>
 
   <div class="result-box" id="result"></div>
 
   <div class="formula-box">
-    <h3>사용된 수식</h3>
-    <p><strong>입력 → S 변환:</strong><br>
-      S = (Z – Z₀I)·(Z + Z₀I)⁻¹  <em>(Z 입력 시)</em><br>
-      S = (Z(Y) – Z₀I)·(Z(Y) + Z₀I)⁻¹  <em>(Y 입력 시, Z(Y)=Y⁻¹)</em><br>
-      S = [A + B/Z₀ – C·Z₀ – D] / Δ  <em>(ABCD 입력 시)</em><br>
-      S₂₁ = 2/Δ, S₁₂ = 2(AD–BC)/Δ, Δ = A + B/Z₀ + C·Z₀ + D
+    <h3>Formulas Used</h3>
+    <p><strong>To S from other parameters:</strong><br>
+      \( S = (Z - Z_0 I)(Z + Z_0 I)^{-1} \quad \text{(from Z)} \)<br>
+      \( S = (Z(Y) - Z_0 I)(Z(Y) + Z_0 I)^{-1} \quad \text{(from Y, where } Z(Y) = Y^{-1}) \)<br>
+      \( S = \frac{A + B/Z_0 - C Z_0 - D}{A + B/Z_0 + C Z_0 + D} \quad \text{(from ABCD)} \)
     </p>
-    <p><strong>S → Z:</strong><br>
-      Z = Z₀·(I + S)·(I – S)⁻¹
+    <p><strong>S to Z:</strong><br>
+      \( Z = Z_0 (I + S)(I - S)^{-1} \)
     </p>
-    <p><strong>Z → Y:</strong><br>
-      Y = Z⁻¹
+    <p><strong>Z to Y:</strong><br>
+      \( Y = Z^{-1} \)
     </p>
-    <p><strong>Z → ABCD:</strong><br>
-      A = Z₁₁/Z₂₁,  B = det(Z)/Z₂₁,  C = 1/Z₂₁,  D = Z₂₂/Z₂₁
+    <p><strong>Z to ABCD:</strong><br>
+      \( A = Z_{11}/Z_{21}, \quad B = \det(Z)/Z_{21}, \quad C = 1/Z_{21}, \quad D = Z_{22}/Z_{21} \)
     </p>
   </div>
 
@@ -139,7 +138,6 @@
       ABCD: ['A','B','C','D']
     };
 
-    // 파라미터 입력 필드 동적 생성
     function setupInputs() {
       const container = document.getElementById('paramInputs');
       container.innerHTML = '';
@@ -160,29 +158,22 @@
     document.getElementById('inputType').addEventListener('change', setupInputs);
     window.addEventListener('load', setupInputs);
 
-    // 입력 파라미터를 복소수 행렬 S로 변환
     function getSfromInput() {
       const Z0 = parseFloat(document.getElementById('z0').value);
       const type = document.getElementById('inputType').value;
       const names = paramMap[type];
-      // 입력 행렬
       const vals = names.map(n => math.complex(
         parseFloat(document.getElementById(n + 'r').value),
         parseFloat(document.getElementById(n + 'i').value)
       ));
-      // 2x2 행렬 형태
       const M = math.matrix([[vals[0], vals[1]], [vals[2], vals[3]]]);
       const I = math.identity(2);
 
-      if (type === 'S') {
-        return M;
-      }
-      if (type === 'Z') {
-        return math.multiply(
-          math.subtract(M, math.multiply(Z0, I)),
-          math.inv(math.add(M, math.multiply(Z0, I)))
-        );
-      }
+      if (type === 'S') return M;
+      if (type === 'Z') return math.multiply(
+        math.subtract(M, math.multiply(Z0, I)),
+        math.inv(math.add(M, math.multiply(Z0, I)))
+      );
       if (type === 'Y') {
         const Z = math.inv(M);
         return math.multiply(
@@ -206,16 +197,12 @@
       }
     }
 
-    // S 행렬 → 원하는 출력 형태로 변환
     function convert() {
       const Z0 = parseFloat(document.getElementById('z0').value);
       const S = getSfromInput();
       const I = math.identity(2);
-      // Z로 변환
       const Z = math.multiply(Z0, math.multiply(math.add(I,S), math.inv(math.subtract(I,S))));
-      // Y로 변환
       const Y = math.inv(Z);
-      // ABCD로 변환
       const Z11 = Z.get([0,0]), Z12 = Z.get([0,1]),
             Z21 = Z.get([1,0]), Z22 = Z.get([1,1]);
       const detZ = math.subtract(math.multiply(Z11,Z22), math.multiply(Z12,Z21));
@@ -223,15 +210,13 @@
             B = math.divide(detZ, Z21),
             C = math.divide(1, Z21),
             D = math.divide(Z22, Z21);
-      // 출력 행렬 선택
       const outType = document.getElementById('outputType').value;
       let M;
       if (outType === 'S')       M = S;
       else if (outType === 'Z')  M = Z;
       else if (outType === 'Y')  M = Y;
-      else                        M = math.matrix([[A,B],[C,D]]);
+      else                       M = math.matrix([[A,B],[C,D]]);
 
-      // 결과 표시
       const names = paramMap[outType];
       let html = `<h3>${outType}-parameters</h3>`;
       const vals = [M.get([0,0]), M.get([0,1]), M.get([1,0]), M.get([1,1])];
@@ -241,6 +226,5 @@
       document.getElementById('result').innerHTML = html;
     }
   </script>
-
 </body>
 </html>
