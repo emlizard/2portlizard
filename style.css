@@ -372,6 +372,7 @@
       display: flex;
       gap: 0.5rem;
       align-items: center;
+      flex-wrap: nowrap; /* 이 속성을 추가합니다. */
     }
 
     .complex-inputs input {
