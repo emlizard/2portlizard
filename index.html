@@ -119,6 +119,29 @@
       justify-content: space-between;
       align-items: center;
     }
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .back-btn:hover {
+      color: var(--primary);
+      background: rgba(37, 99, 235, 0.1);
+    }
+
 
     .page-title {
       font-size: 1.5rem;
@@ -600,14 +623,20 @@
   </style>
 </head>
 <body>
-  <div class="header">
+  <header class="header">
     <div class="header-content">
-      <div class="page-title">2-Port Network Converter</div>
+      <div class="logo-section">
+        <a href="https://emlizard.github.io/main-page/" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+          Back to Calculators
+        </a>
+        <div class="page-title">2-Port Network Converter</div>
+      </div>
       <button class="theme-toggle" onclick="toggleTheme()">
-        <i class="fas fa-moon" id="theme-icon"></i>
+        <i class="fas fa-moon" id="themeIcon"></i>
       </button>
     </div>
-  </div>
+  </header>
 
   <div class="container">
     <div class="hero">
