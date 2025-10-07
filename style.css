@@ -376,7 +376,7 @@
     }
 
     .complex-inputs input {
-      width: 60px; /* 이 부분을 추가하여 너비를 고정합니다. */
+      width: 140px; /* 이 부분을 추가하여 너비를 고정합니다. */
       padding: 0.5rem;
       border: 1px solid var(--border);
       border-radius: var(--radius);
